@@ -1,10 +1,16 @@
 import React, {useState} from 'react';
-import { View, Text,TouchableWithoutFeedback } from 'react-native';
+import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 
 import Video from 'react-native-video';
 import styles from './styles';
 
-const Post = () => {
+import Entypo from 'react-native-vector-icons/Entypo';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+
+const Post = (props) => {
+    const {post} = props;
 
     const [paused, setPaused] = useState(false);
 
@@ -15,14 +21,51 @@ const Post = () => {
     return (
         <View style={styles.container}>
             <TouchableWithoutFeedback onPress={onPlayPausePress}>
-                <Video
-                    source={{uri: 'https://media.fmkorea.com/files/attach/new2/20210223/486616/21787941/3411727573/3ce8f805cccdef5e27a56a2764130ade.mp4?d' }}
-                    style={styles.video}
-                    onError={(e) => console.log(e)}
-                    resizeMode={'cover'}
-                    repeat={true}
-                    paused={paused}
-                />
+                <View>
+                    <Video
+                        source={{uri: post.videoUri}}
+                        style={styles.video}
+                        onError={(e) => console.log(e)}
+                        resizeMode={'cover'}
+                        repeat={true}
+                        paused={paused}
+                    />
+
+                    <View style={styles.uiContainer}>
+                        <View style={styles.rightContainer}>
+                            <Image style={styles.profilePicture} source={{uri: post.user.imageUri}} />
+                            <View style={styles.iconContainer}>
+                                <AntDesign name={"hearto"} size={40} color="white" />
+                                <Text style={styles.statsLabel}>{post.likes}</Text>
+                            </View>
+                            <View style={styles.iconContainer}>
+                                <FontAwesome name={"commenting"} size={40} color="white" />
+                                <Text style={styles.statsLabel}>{post.comments}</Text>
+                            </View>
+                            <View style={styles.iconContainer}>
+                                <Fontisto name={"share-a"} size={35} color="white" />
+                                <Text style={styles.statsLabel}>{post.shares}</Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.bottomContainer}>
+                            <View>
+                                <Text style={styles.handle}>{post.user.username}</Text>
+                                <Text style={styles.description}>{post.description}</Text>
+
+                                <View style={styles.songRow}>
+                                    <Entypo name={"beamed-note"} size={24} color="white" />
+                                    <Text style={styles.songName}>{post.songName}</Text>
+                                </View>
+                            </View>
+                            <Image 
+                                style={styles.songImage}
+                                source={{uri: post.songImage}} />
+
+                        </View>
+                    </View>
+                </View>
+
             </TouchableWithoutFeedback>
         </View>
     );
